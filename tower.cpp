@@ -10,15 +10,16 @@
 #include <QTimer>
 #include <QVector2D>
 #include <QtMath>
+#include <QDebug>
 
 //const QSize Tower::ms_fixedSize(42, 42);
-Tower::Tower(int _attackRange, int _attackDamage, int _attackInterval,
-             QPoint _pos, const QPixmap &_img)
-    :attackRange(_attackRange),
-     attackDamage(_attackDamage),
-     attackInterval(_attackInterval),
-     pos(_pos),
-     img(_img)
+Tower::Tower(int _attackRange, int _attackDamage, int _attackSpeed,
+             QPointF _pos, const QPixmap &_img)
+    : attackRange(_attackRange)
+    , attackDamage(_attackDamage)
+    , attackSpeed(_attackSpeed)
+    , pos(_pos)
+    , img(_img)
 {
     attacking = false;
     //connect(m_fireRateTimer, SIGNAL(timeout()), this, SLOT(shootWeapon()));
@@ -30,9 +31,23 @@ Tower::~Tower()
     //m_fireRateTimer = NULL;
 }
 
-void Tower::draw(QPainter *painter) const
+QRectF Tower::boundingRect() const
 {
-    painter->drawPixmap(pos, img);
+    return QRectF(0,0,0,0);
+}
+
+void Tower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+
+    qDebug() << "Tower::paint" << pos<<endl;
+    //painter->save();
+    painter->drawPixmap(pos,img);
+    //painter->restore();
+}
+void Tower::advance(int phase) {
+
 }
 /*
 void Tower::checkEnemyInRange()

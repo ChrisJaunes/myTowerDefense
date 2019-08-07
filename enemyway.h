@@ -7,16 +7,12 @@
 class EnemyWay
 {
 public:
-    EnemyWay(QPoint pos);
-
-    void draw(QPainter *painter) const;
-
-    void setNextWay(EnemyWay *nextPoint);
-    EnemyWay* getNextWay() const;
-    const QPoint getPos() const;
+    void setEnemyWay(const QString &fileName = QString(":/Round1/config/TowerBasePosition1.txt"));
+    QPointF* getStartPos();
+    QPointF* getNextPos();
 
 private:
-    const QPoint		pos;
-    EnemyWay *			nextWay;
+    QList<QPointF>::Iterator      it;
+    QList<QPointF>                way;
 };
 #endif // ENEMYWAY_H

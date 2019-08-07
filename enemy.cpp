@@ -1,9 +1,5 @@
 #include "enemy.h"
-/*
-#include "enemy.h"
-#include "tower.h"
-#include "mainwindow.h"
-#include "audioplayer.h"
+#include "enemyway.h"
 #include <QPainter>
 #include <QColor>
 #include <QDebug>
@@ -11,42 +7,58 @@
 #include <QVector2D>
 #include <QtMath>
 
-static const int Health_Bar_Width = 20;
+//static const int Health_Bar_Width = 20;
 
-const QSize Enemy::ms_fixedSize(52, 52);
+//const QSize Enemy::ms_fixedSize(52, 52);
 
-Enemy::Enemy(WayPoint *startWayPoint, MainWindow *game, const QPixmap &sprite)
-    : QObject(0)
-    , m_active(false)
-    , m_maxHp(40)
-    , m_currentHp(40)
-    , m_walkingSpeed(1.0)
-    , m_rotationSprite(0.0)
-    , m_pos(startWayPoint->pos())
-    , m_destinationWayPoint(startWayPoint->nextWayPoint())
-    , m_game(game)
-    , m_sprite(sprite)
+Enemy::Enemy(EnemyWay _enemyWay, int _maxHP, int _moveSpeed, const QPixmap &_img, QGraphicsItem *parent)
+    : QGraphicsItem(parent)
+    , maxHp(_maxHP)
+    , moveSpeed(_moveSpeed)
+    , enemyWay(_enemyWay)
+    , img(_img)
 {
+    pos = *(enemyWay.getStartPos());
+    qDebug()<<"Enemy::Enemy"<<pos<<endl;
 }
 
-Enemy::~Enemy()
+QRectF Enemy::boundingRect()const
 {
-    m_attackedTowersList.clear();
-    m_destinationWayPoint = NULL;
-    m_game = NULL;
+    return QRectF();
 }
 
-void Enemy::doActivate()
+void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    m_active = true;
+    qDebug() << "Enemy::paint" <<endl;
+    painter->save();
+    //QPoint healthBarPoint = pos + QPoint(-Health_Bar_Width / 2 - 5, -ms_fixedSize.height() / 3);
+    // 绘制血条
+    //painter->setPen(Qt::NoPen);
+    //painter->setBrush(Qt::red);
+    //QRect healthBarBackRect(healthBarPoint, QSize(Health_Bar_Width, 2));
+    //painter->drawRect(healthBarBackRect);
+
+    //painter->setBrush(Qt::green);
+    //QRect healthBarRect(healthBarPoint, QSize((double)m_currentHp / m_maxHp * Health_Bar_Width, 2));
+    //painter->drawRect(healthBarRect);
+
+    // 绘制偏转坐标,由中心+偏移=左上
+    //static const QPoint offsetPoint(-ms_fixedSize.width() / 2, -ms_fixedSize.height() / 2);
+    //painter->translate(m_pos);
+    //painter->rotate(m_rotationSprite);
+    // 绘制敌人
+    painter->drawPixmap(pos, img);
+
+    painter->restore();
 }
 
-void Enemy::move()
+void Enemy::advance(int phase)
 {
-    if (!m_active)
-        return;
+    qDebug() << "Enemy::advance" << phase<<endl;
+//    if (!m_active)
+//        return;
 
-    if (collisionWithCircle(m_pos, 1, m_destinationWayPoint->pos(), 1))
+  /*  if (collisionWithCircle(m_pos, 1, m_destinationWayPoint->pos(), 1))
     {
         // 敌人抵达了一个航点
         if (m_destinationWayPoint->nextWayPoint())
@@ -63,50 +75,52 @@ void Enemy::move()
             return;
         }
     }
-
+*/
     // 还在前往航点的路上
     // 目标航点的坐标
-    QPoint targetPoint = m_destinationWayPoint->pos();
+    QPointF targetPoint(500, 500);
     // 未来修改这个可以添加移动状态,加快,减慢,m_walkingSpeed是基准值
 
     // 向量标准化
-    qreal movementSpeed = m_walkingSpeed;
-    QVector2D normalized(targetPoint - m_pos);
+    qreal movementSpeed = moveSpeed;
+    QVector2D normalized(targetPoint - pos);
     normalized.normalize();
-    m_pos = m_pos + normalized.toPoint() * movementSpeed;
-
+    pos = pos + normalized.toPoint() * movementSpeed;
+    qDebug() << pos<< endl;
     // 确定敌人选择方向
     // 默认图片向左,需要修正180度转右
-    m_rotationSprite = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) + 180;
+    //m_rotationSprite = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) + 180;
 }
-
-void Enemy::draw(QPainter *painter) const
+/*
+Enemy::Enemy(WayPoint *startWayPoint, MainWindow *game, const QPixmap &sprite)
+    : QObject(0)
+    , m_active(false)
+    , m_maxHp(40)
+    , m_currentHp(40)
+    , m_walkingSpeed(1.0)
+    , m_rotationSprite(0.0)
+    , m_pos(startWayPoint->pos())
+    , m_destinationWayPoint(startWayPoint->nextWayPoint())
+    , m_game(game)
+    , m_sprite(sprite)
 {
-    if (!m_active)
-        return;
-
-    painter->save();
-
-    QPoint healthBarPoint = m_pos + QPoint(-Health_Bar_Width / 2 - 5, -ms_fixedSize.height() / 3);
-    // 绘制血条
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(Qt::red);
-    QRect healthBarBackRect(healthBarPoint, QSize(Health_Bar_Width, 2));
-    painter->drawRect(healthBarBackRect);
-
-    painter->setBrush(Qt::green);
-    QRect healthBarRect(healthBarPoint, QSize((double)m_currentHp / m_maxHp * Health_Bar_Width, 2));
-    painter->drawRect(healthBarRect);
-
-    // 绘制偏转坐标,由中心+偏移=左上
-    static const QPoint offsetPoint(-ms_fixedSize.width() / 2, -ms_fixedSize.height() / 2);
-    painter->translate(m_pos);
-    painter->rotate(m_rotationSprite);
-    // 绘制敌人
-    painter->drawPixmap(offsetPoint, m_sprite);
-
-    painter->restore();
 }
+/*
+Enemy::~Enemy()
+{
+    m_attackedTowersList.clear();
+    m_destinationWayPoint = NULL;
+    m_game = NULL;
+}
+
+void Enemy::doActivate()
+{
+    m_active = true;
+}
+
+
+
+
 
 void Enemy::getRemoved()
 {

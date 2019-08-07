@@ -5,20 +5,17 @@
 #include <QPoint>
 #include <QSize>
 #include <QPixmap>
+#include <QGraphicsItem>
 
-/*class WayPoint;
-class QPainter;
-class MainWindow;
-class Tower;
+#include "enemyway.h"
 
-class Enemy : public QObject
+class Enemy : public QGraphicsItem
 {
-	Q_OBJECT
 public:
-    Enemy(WayPoint *startWayPoint, MainWindow *game, const QPixmap &sprite = QPixmap(":/image/enemy.png"));
-	~Enemy();
+    Enemy(EnemyWay _enemyWay, int _maxHP = 100, int _moveSpeed = 1,
+          const QPixmap &_img = QPixmap(":/utiliy/image/enemy.png"), QGraphicsItem *parent = nullptr);
 
-	void draw(QPainter *painter) const;
+    //void draw(QPainter *painter) const;
     //void move();
     //void getDamage(int damage);
     //void getRemoved();
@@ -26,23 +23,20 @@ public:
     //void gotLostSight(Tower *attacker);
     //QPoint getpos() const;
 
-public slots:
-	void doActivate();
+protected:
+    QRectF boundingRect()const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 
-    protected:
-	bool			m_active;
-    int				maxHp;
-    int				currentHp;
-    qreal			walkingSpeed;
-    qreal			rotationSprite;
+protected slots:
+    void advance(int phase);
 
-    QPoint			pos;
-    Enemy*		    destinationWayPoint;
-	MainWindow *	m_game;
-    QList<Tower *>	attackedTowersList;
+protected:
+    int             maxHp;
+    int	            currentHp;
+    qreal           moveSpeed;
+    QPointF         pos;
+    EnemyWay        enemyWay;
 
-    const QPixmap	img;
-    static const QSize ms_fixedSize;
+    const QPixmap   img;
 };
-*/
 #endif // ENEMY_H

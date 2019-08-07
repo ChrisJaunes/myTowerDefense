@@ -1,38 +1,32 @@
 #include "enemyway.h"
-#include <QPainter>
-#include <QColor>
+#include <QMessageBox>
+#include <QDebug>
+#include <QFile>
 
-EnemyWay::EnemyWay(QPoint _pos)
-    : pos(_pos),
-      nextWay(nullptr)
+void EnemyWay::setEnemyWay(const QString &fileName)
 {
+    qDebug() <<"EnemyWay::setEnemyWay";
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        //QMessageBox::warning(this, "TowerDefense", "Cannot Open File");
+        return;
+    }
+    QTextStream  in( &file );
+    for(QString  x ,y;!in.atEnd();) {
+        in>>x>>y;
+        way.push_back(QPointF(x.toInt(), y.toInt()));
+        qDebug() << x <<" " << y<<endl;
+    }
+    file.close();
 }
-
-void EnemyWay::draw(QPainter *painter) const
+QPointF* EnemyWay::getStartPos()
 {
-    painter->save();
-    painter->setPen(Qt::green);
-    painter->drawEllipse(pos, 6, 6);
-    painter->drawEllipse(pos, 2, 2);
-
-    if (nextWay)
-        painter->drawLine(pos, nextWay->pos);
-    painter->restore();
+    it = way.begin();
+    return &(*it);
 }
-
-void EnemyWay::setNextWay(EnemyWay *_nextWay)
+QPointF* EnemyWay::getNextPos()
 {
-    nextWay = _nextWay;
+   if(++it == way.end())
+       return nullptr;
+   return &(*it);
 }
-
-EnemyWay* EnemyWay::getNextWay() const
-{
-    return nextWay;
-}
-
-const QPoint EnemyWay::getPos() const
-{
-    return pos;
-}
-
-

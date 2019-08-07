@@ -7,21 +7,20 @@
 #include <QSize>
 #include <QPixmap>
 #include <QObject>
+#include <QGraphicsItem>
 
 class QPainter;
 class Enemy;
 class MainWindow;
 class QTimer;
 
-class Tower : QObject
+class Tower : public QGraphicsItem
 {
-    Q_OBJECT
 public:
-    Tower(int _attackRange, int _attackDamage, int _attackInterval,
-          QPoint pos, const QPixmap &sprite = QPixmap(":/image/tower.png"));
+    Tower(int _attackRange, int _attackDamage, int _attackSpeed,
+          QPointF pos, const QPixmap &sprite = QPixmap(":/utiliy/image/tower2.png"));
     ~Tower();
 
-    void draw(QPainter *painter) const;
 	/*void checkEnemyInRange();
 	void targetKilled();
 	void attackEnemy();
@@ -29,6 +28,13 @@ public:
 	void removeBullet();
 	void damageEnemy();
 	void lostSightOfEnemy();*/
+
+protected:
+    QRectF boundingRect()const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
+
+protected slots:
+    void advance(int phase);
 
 private slots:
 	//void shootWeapon();
@@ -38,8 +44,8 @@ private:
 
     int             attackRange;
     int             attackDamage;
-    int             attackInterval;
-    const QPoint	pos;
+    int             attackSpeed;
+    const QPointF   pos;
     const QPixmap	img;
     //qreal			m_rotationSprite;
 

@@ -6,5 +6,8 @@
     <qresource prefix="/utiliy">
         <file>image/icon_HP.png</file>
         <file>image/towerBase1.png</file>
+        <file>image/tower1.png</file>
+        <file>image/tower2.png</file>
+        <file>image/enemy.png</file>
     </qresource>
 </RCC>

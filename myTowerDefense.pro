@@ -30,18 +30,24 @@ SOURCES += \
     gamewidget.cpp \
     tower.cpp \
     enemy.cpp \
-    towerbase.cpp \
     enemyway.cpp \
-    bullet.cpp
+    bullet.cpp \
+    mapblock.cpp \
+    gamescene.cpp \
+    towertypelist.cpp \
+    gameview.cpp
 
 HEADERS += \
         mainwindow.h \
     gamewidget.h \
     tower.h \
     enemy.h \
-    towerbase.h \
     enemyway.h \
-    bullet.h
+    bullet.h \
+    mapblock.h \
+    gamescene.h \
+    towertypelist.h \
+    gameview.h
 
 FORMS += \
         mainwindow.ui \

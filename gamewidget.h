@@ -2,33 +2,54 @@
 #define GAMEWIDGET_H
 
 #include <QWidget>
-#include "towerbase.h"
-#include "tower.h"
-#include "enemyway.h"
-//#include "enemy.h"
-#include "bullet.h"
 
+class GameScene;
 
 namespace Ui {
 class GameWidget;
 }
+
 class GameWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit GameWidget(QWidget *parent = nullptr, QWidget *infoWidget = nullptr);
+    explicit GameWidget(QWidget *parent = nullptr);
     ~GameWidget();
 
-protected:
-    void loadTowerBasePositions();
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-
 private:
-    Ui::GameWidget          *ui;
-    QWidget                 *infoWidget;
-    QList<TowerBase *>	    towerBaseList;
+    Ui::GameWidget  *ui;
+    GameScene       *gameScene;
+};
+
+//#include "towerbase.h"
+//#include "tower.h"
+//#include "enemyway.h"
+//#include "enemy.h"
+//#include "bullet.h"
+
+
+//namespace Ui {
+//class GameWidget;
+//}
+//class GameWidget : public QWidget
+//{
+//    Q_OBJECT
+//
+//public:
+//    explicit GameWidget(QWidget *parent = nullptr, QWidget *infoWidget = nullptr);
+//    ~GameWidget();
+
+//protected:
+//    void loadTowerBasePositions();
+//    void paintEvent(QPaintEvent *);
+//    void mousePressEvent(QMouseEvent *);
+
+//private:
+//    Ui::GameWidget          *ui;
+//    QString                 mapBackGround;
+//    QWidget                 *infoWidget;
+//    QList<TowerBase *>	    towerBaseList;
     //QList<Tower *>			towersList;
     //QList<EnemyWay *>       enemyWayList;
     //QList<Enemy *>			enemyList;
@@ -75,6 +96,6 @@ private:
     void preLoadWavesInfo();
 */
 
-};
+//};
 
 #endif // GAMEWIDGET_H

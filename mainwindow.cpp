@@ -9,9 +9,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     for(int i = 0; i < 5; i++) {
         QWidget *it = new QWidget();
-        gameWidge.push_back(new GameWidget(it, ui->info));
+        //gameWidge.push_back(new GameWidget(it, ui->info));
         ui->gameStackedWidget->addWidget(it);
-        ui->roundComboBox->addItem(QString("Round" + QString::number(i)));
+        ui->roundComboBox->addItem(QString("Round" + QString::number(i + 1)));
     }
 }
 
