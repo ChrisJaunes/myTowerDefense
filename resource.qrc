@@ -9,5 +9,6 @@
         <file>image/tower1.png</file>
         <file>image/tower2.png</file>
         <file>image/enemy.png</file>
+        <file>image/bullet.png</file>
     </qresource>
 </RCC>

@@ -31,11 +31,11 @@ SOURCES += \
     tower.cpp \
     enemy.cpp \
     enemyway.cpp \
-    bullet.cpp \
     mapblock.cpp \
     gamescene.cpp \
     towertypelist.cpp \
-    gameview.cpp
+    gameview.cpp \
+    attack.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,11 +43,11 @@ HEADERS += \
     tower.h \
     enemy.h \
     enemyway.h \
-    bullet.h \
     mapblock.h \
     gamescene.h \
     towertypelist.h \
-    gameview.h
+    gameview.h \
+    attack.h
 
 FORMS += \
         mainwindow.ui \

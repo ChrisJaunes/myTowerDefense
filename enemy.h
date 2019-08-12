@@ -3,25 +3,28 @@
 
 #include <QObject>
 #include <QPoint>
+#include <QList>
 #include <QSize>
 #include <QPixmap>
 #include <QGraphicsItem>
+#include <QGraphicsScene>
 
 #include "enemyway.h"
-
+class Attack;
+class GameScene;
 class Enemy : public QGraphicsItem
 {
 public:
-    Enemy(EnemyWay _enemyWay, int _maxHP = 100, int _moveSpeed = 1,
+    Enemy(GameScene *_gameSence, EnemyWay _enemyWay,
+          int _maxHP = 100, int _moveSpeed = 1,
           const QPixmap &_img = QPixmap(":/utiliy/image/enemy.png"), QGraphicsItem *parent = nullptr);
 
-    //void draw(QPainter *painter) const;
-    //void move();
-    //void getDamage(int damage);
-    //void getRemoved();
-    //void getAttacked(Tower *attacker);
-    //void gotLostSight(Tower *attacker);
-    //QPoint getpos() const;
+    void addAttackSource(Attack *attack);
+    void removeAttackSource(Attack *attack);
+
+    QPointF getpos() const;
+    void changeHP(int x);
+    void goDead();
 
 protected:
     QRectF boundingRect()const;
@@ -31,11 +34,14 @@ protected slots:
     void advance(int phase);
 
 protected:
+    GameScene       *gameSence;
+    EnemyWay        enemyWay;
+    QList<Attack*>  attackSourceList;
+
     int             maxHp;
     int	            currentHp;
     qreal           moveSpeed;
     QPointF         pos;
-    EnemyWay        enemyWay;
 
     const QPixmap   img;
 };

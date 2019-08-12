@@ -59,8 +59,9 @@ void GameScene::setSceneInfo(int _round, int _mapR, int _mapC)
     //test;
     EnemyWay *way = new EnemyWay;
     way->setEnemyWay();
-    Enemy *peo = new Enemy(*way);
+    Enemy *peo = new Enemy(this, *way);
     addItem(peo);
+    enemyList.append(peo);
     update();
 }
 void GameScene::advance() {
@@ -79,7 +80,7 @@ void GameScene::setTower(const QPointF &pointF, const QString text)
     qDebug()<<"GameScene::createRect"<<endl;
     int towerID = getMapBlockPosToId(pointF);
     QPointF pos(50, 50);//towerBase.at(towerID)->pos();
-    Tower *tower = new Tower(1,1,1,pointF);
+    Tower *tower = new Tower(this,1,1,1,pointF);
 
     this->addItem(tower);
     update();

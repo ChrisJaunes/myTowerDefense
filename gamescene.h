@@ -6,6 +6,7 @@
 #include <QGraphicsView>
 
 class MapBlock;
+class Enemy;
 
 class GameScene : public QGraphicsScene
 {
@@ -18,6 +19,10 @@ public:
     QPointF getMapBlockIdToPos(int id);
     void setTower(const QPointF &pointF, const QString text);
     void startGame(int round = 1);
+
+    QVector<MapBlock *>  towerBase;
+    QVector<Enemy *>     enemyList;
+
 public slots:
     void advance();
 
@@ -37,7 +42,6 @@ private:
     int                  mapC;
     qreal                mapBlockH;
     qreal                mapBlockW;
-    QVector<MapBlock *>  towerBase;
 
     QTimer               *gameTime;
 };

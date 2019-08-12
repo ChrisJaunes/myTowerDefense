@@ -1,8 +1,7 @@
 #include "tower.h"
-
-#include "tower.h"
 #include "enemy.h"
-#include "bullet.h"
+#include "attack.h"
+#include "gamescene.h"
 #include "mainwindow.h"
 //#include "utility.h"
 #include <QPainter>
@@ -13,9 +12,11 @@
 #include <QDebug>
 
 //const QSize Tower::ms_fixedSize(42, 42);
-Tower::Tower(int _attackRange, int _attackDamage, int _attackSpeed,
+Tower::Tower(GameScene *_gameScene,
+             int _attackRange, int _attackDamage, int _attackSpeed,
              QPointF _pos, const QPixmap &_img)
-    : attackRange(_attackRange)
+    : gameScene(_gameScene)
+    , attackRange(_attackRange)
     , attackDamage(_attackDamage)
     , attackSpeed(_attackSpeed)
     , pos(_pos)
@@ -47,7 +48,12 @@ void Tower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     //painter->restore();
 }
 void Tower::advance(int phase) {
-
+    qDebug()<<"Tower::advance"<<endl;
+    foreach (Enemy *it, gameScene->enemyList) {
+        qDebug()<<pos<<" "<<it->getpos()<<endl;
+        OrdinaryBullet *ita = new OrdinaryBullet(pos, it);
+        gameScene->addItem((QGraphicsItem *) ita);
+    };
 }
 /*
 void Tower::checkEnemyInRange()

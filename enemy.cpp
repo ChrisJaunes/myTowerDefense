@@ -1,5 +1,7 @@
+#include "attack.h"
 #include "enemy.h"
 #include "enemyway.h"
+#include "gamescene.h"
 #include <QPainter>
 #include <QColor>
 #include <QDebug>
@@ -11,11 +13,12 @@
 
 //const QSize Enemy::ms_fixedSize(52, 52);
 
-Enemy::Enemy(EnemyWay _enemyWay, int _maxHP, int _moveSpeed, const QPixmap &_img, QGraphicsItem *parent)
+Enemy::Enemy(GameScene *_gameSence, EnemyWay _enemyWay, int _maxHP, int _moveSpeed, const QPixmap &_img, QGraphicsItem *parent)
     : QGraphicsItem(parent)
+    , gameSence(_gameSence)
+    , enemyWay(_enemyWay)
     , maxHp(_maxHP)
     , moveSpeed(_moveSpeed)
-    , enemyWay(_enemyWay)
     , img(_img)
 {
     pos = *(enemyWay.getStartPos());
@@ -29,6 +32,9 @@ QRectF Enemy::boundingRect()const
 
 void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+
     qDebug() << "Enemy::paint" <<endl;
     painter->save();
     //QPoint healthBarPoint = pos + QPoint(-Health_Bar_Width / 2 - 5, -ms_fixedSize.height() / 3);
@@ -90,6 +96,38 @@ void Enemy::advance(int phase)
     // 确定敌人选择方向
     // 默认图片向左,需要修正180度转右
     //m_rotationSprite = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) + 180;
+}
+
+void Enemy::addAttackSource(Attack *attack){
+    attackSourceList.append(attack);
+}
+
+void Enemy::removeAttackSource(Attack *attack) {
+    for(auto it = attackSourceList.begin(); it != attackSourceList.end(); ++it) {
+        if(*it == attack) {
+            gameSence->removeItem((QGraphicsItem *)attack);
+            attackSourceList.erase(it);
+            delete attack;
+            break;
+        }
+    }
+}
+QPointF Enemy::getpos() const{
+    return pos;
+}
+void Enemy::changeHP(int x) {
+    currentHp -= x;
+    if(currentHp <= 0) goDead();
+}
+
+void Enemy::goDead() {
+    while(!attackSourceList.empty()) {
+        Attack *attack = attackSourceList.first();
+        attackSourceList.pop_front();
+        gameSence->removeItem((QGraphicsItem *)attack);
+        delete attack;
+    }
+
 }
 /*
 Enemy::Enemy(WayPoint *startWayPoint, MainWindow *game, const QPixmap &sprite)

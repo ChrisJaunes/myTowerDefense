@@ -13,11 +13,13 @@ class QPainter;
 class Enemy;
 class MainWindow;
 class QTimer;
+class GameScene;
 
 class Tower : public QGraphicsItem
 {
 public:
-    Tower(int _attackRange, int _attackDamage, int _attackSpeed,
+    Tower(GameScene *_gameScene,
+          int _attackRange, int _attackDamage, int _attackSpeed,
           QPointF pos, const QPixmap &sprite = QPixmap(":/utiliy/image/tower2.png"));
     ~Tower();
 
@@ -40,6 +42,7 @@ private slots:
 	//void shootWeapon();
 
 private:
+    GameScene       *gameScene;
     bool            attacking;
 
     int             attackRange;
